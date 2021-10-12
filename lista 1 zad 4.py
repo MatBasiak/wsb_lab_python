@@ -11,5 +11,10 @@ def xrange(start, *end):
             begin += 1
 
 
-for num in xrange(5,10):
-    print(num)
+for num in xrange(-5, 10):
+    print(num, end=" ")
+
+print("\n")
+
+for num in xrange(10):
+    print(num, end=" ")
