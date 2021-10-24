@@ -1,0 +1,25 @@
+# zad1
+
+# import multiprocessing
+# print(multiprocessing.cpu_count())
+
+# zad 2
+# import os, multiprocessing
+
+
+# 2.1
+# pid = os.getpid()
+# print(pid)
+# 2.2
+
+# def print_pid():
+#     print(os.getpid())
+#     return
+#
+#
+# if __name__ == '__main__':
+#     p1 = multiprocessing.Process(target=print_pid)
+#     p2 = multiprocessing.Process(target=print_pid)
+#     p1.start()
+#     p2.start()
+
