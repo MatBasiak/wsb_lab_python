@@ -1,0 +1,82 @@
+# zad1
+
+# import multiprocessing
+# print(multiprocessing.cpu_count())
+
+# zad 2
+# import os, multiprocessing
+
+
+# 2.1
+# pid = os.getpid()
+# print(pid)
+# 2.2
+
+# def print_pid():
+#     print(os.getpid())
+#     return
+#
+#
+# if __name__ == '__main__':
+#     p1 = multiprocessing.Process(target=print_pid)
+#     p2 = multiprocessing.Process(target=print_pid)
+#     p1.start()
+#     p2.start()
+
+# zad3
+# 3.1
+# import multiprocessing
+#
+# elements = [1, 2, "lolo", "john", "exit"]
+#
+#
+# def print_element(element, q):
+#     if element != "exit":
+#         q.put(element)
+#     else:
+#         return
+#
+#
+# if __name__ == "__main__":
+#
+#     queue = multiprocessing.Queue()
+#
+#     for i in range(0, len(elements)):
+#         multiprocessing.Process(target=print_element, args=(elements[i], queue)).start()
+#
+#     for i in range(0, len(elements)):
+#         message = queue.get()
+#         print(message)
+
+3.2
+
+import multiprocessing
+
+elements = []
+
+
+def print_element(q):
+    message = q.get()
+    print(message)
+
+
+def read_element(q):
+    user_input = input("PODAJ NAPIS: ")
+    q.put(user_input)
+
+
+def main():
+    queue = multiprocessing.Queue()
+    counter = 0
+    flag = True
+
+    while flag:
+        multiprocessing.Process(target=read_element, args=(queue,)).start()
+        multiprocessing.Process(target=print_element, args=(queue,)).start()
+        counter += 1
+        if counter > 10:
+            flag = False
+
+
+if __name__ == "__main__":
+    main()
