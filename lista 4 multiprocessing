@@ -80,3 +80,40 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+
+# zad 5
+import uuid, hashlib
+import concurrent.futures
+
+uuids = []
+md5s = []
+
+
+def generate():
+    for i in range(0, 200):
+        uid = uuid.uuid4().hex
+        uuids.append(uid)
+
+
+def checksum(uid):
+    md5checksum = hashlib.md5(uid.encode()).hexdigest()
+    return md5checksum
+
+
+def main():
+    generate()
+
+    with concurrent.futures.ProcessPoolExecutor() as executor:
+        for i in range(0, len(uuids)):
+            res = executor.submit(checksum, uuids[i]).result()
+            md5s.append(res)
+
+    for uuid, md5 in zip(uuids, md5s):
+        print(f"{uuid} - {md5}")
+
+
+if __name__ == "__main__":
+    main()
