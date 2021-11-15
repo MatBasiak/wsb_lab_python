@@ -1,15 +1,17 @@
 # zad1
 
 import multiprocessing
+
 print(multiprocessing.cpu_count())
 
 # zad 2
 import os, multiprocessing
 
-
 # 2.1
 pid = os.getpid()
 print(pid)
+
+
 # 2.2
 
 def print_pid():
@@ -48,40 +50,46 @@ if __name__ == "__main__":
         message = queue.get()
         print(message)
 
-3.2
 
+# Zad 3.2
 import multiprocessing
+import time
 
-elements = []
-
-
-def print_element(q):
-    message = q.get()
-    print(message)
+def get_message():
+    return input("Podaj napis: ")
 
 
-def read_element(q):
-    user_input = input("PODAJ NAPIS: ")
-    q.put(user_input)
+def return_message(message):
+    print("Proces potomny:", message)
+
+
+def main_process(q):
+    message = ""
+    while message != "exit":
+        if q.empty() != True:
+            message = q.get()
+            return_message(message)
+        else:
+            continue
 
 
 def main():
     queue = multiprocessing.Queue()
-    counter = 0
-    flag = True
+    process = multiprocessing.Process(target=main_process, args=(queue,)).start()
 
-    while flag:
-        multiprocessing.Process(target=read_element, args=(queue,)).start()
-        multiprocessing.Process(target=print_element, args=(queue,)).start()
-        counter += 1
-        if counter > 10:
-            flag = False
+    message = ""
+    while message != "exit":
+        time.sleep(1)
+        message = get_message()
+        queue.put(message)
+    try:
+        process.join()
+    except Exception as e:
+        pass
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
-
-
 
 # zad 4
 import concurrent.futures
@@ -89,7 +97,7 @@ import concurrent.futures
 
 def read_numbers():
     numbers = []
-    for i in range(3):
+    for i in range(10):
         number = int(input("Podaj liczbę: "))
         numbers.append(number)
     return numbers
@@ -100,13 +108,10 @@ def power(n):
 
 
 def main():
-    results = []
     numbers = read_numbers()
 
     with concurrent.futures.ProcessPoolExecutor() as executor:
-        for i in range(0, len(numbers)):
-            res = executor.submit(power, numbers[i]).result()
-            results.append(res)
+        results = executor.map(power, numbers)
 
     for res in results:
         print(res, end=" ")
@@ -114,8 +119,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
 
 # # zad 5
 import uuid, hashlib
@@ -150,4 +153,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
